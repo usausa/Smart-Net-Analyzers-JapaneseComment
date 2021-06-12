@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Smart.Analyzers.JapaneseComment": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\Smart.Analyzers.JapaneseComment.Sample\\Smart.Analyzers.JapaneseComment.Sample.csproj"
+    }
+  }
+}
