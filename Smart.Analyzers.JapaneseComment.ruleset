@@ -2,7 +2,17 @@
 <RuleSet Name="Smart.Analyzers.JapaneseComment Rules" Description="Smart.Analyzers.JapaneseComment Rules" ToolsVersion="16.0">
   <IncludeAll Action="Warning" />
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <Rule Id="SA1101" Action="Hidden" />
+    <Rule Id="SA1121" Action="Hidden" />
+    <Rule Id="SA1204" Action="Hidden" />
+    <Rule Id="SA1413" Action="Hidden" />
+    <Rule Id="SA1503" Action="Hidden" />
+    <Rule Id="SA1515" Action="Hidden" />
+    <Rule Id="SA1600" Action="Hidden" />
+    <Rule Id="SA1633" Action="Hidden" />
   </Rules>
-  <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.NetAnalyzers">
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.NetAnalyzers"></Rules>
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.Analyzers" RuleNamespace="Microsoft.CodeAnalysis.Analyzers">
+    <Rule Id="RS2008" Action="Hidden" />
   </Rules>
 </RuleSet>

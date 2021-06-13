@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <CodeAnalysisRuleSet>..\Smart.Analyzers.JapaneseComment.ruleset</CodeAnalysisRuleSet>
     <IsRoslynComponent>true</IsRoslynComponent>
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackBuildOutputs</TargetsForTfmSpecificContentInPackage>
     <IncludeBuildOutput>false</IncludeBuildOutput>

@@ -1,12 +1,18 @@
 namespace Smart.Analyzers.JapaneseComment.Sample
 {
-    // あああ
+    // ｱｱｱ
+    // ＡＡＡ
     public class TargetClass1
     {
-        // aaa
+        /// <summary>
+        /// ｱｱｱ
+        /// </summary>
         public static void Test()
         {
-            /* test */
+            // １
+            /* [　] */
+            /* ＃ */
+            /// １
         }
     }
 }
