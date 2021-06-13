@@ -144,7 +144,7 @@ namespace Smart.Analyzers.JapaneseComment
             messageFormat: "\"，\" in comment should be narrow",
             category: "Style",
             defaultSeverity: DiagnosticSeverity.Warning,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,  // Default off
             description: string.Empty);
 
         private static readonly DiagnosticDescriptor RuleWideHyphen = new(
@@ -162,7 +162,7 @@ namespace Smart.Analyzers.JapaneseComment
             messageFormat: "\"．\" in comment should be narrow",
             category: "Style",
             defaultSeverity: DiagnosticSeverity.Warning,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,  // Default off
             description: string.Empty);
 
         private static readonly DiagnosticDescriptor RuleWideSlash = new(
