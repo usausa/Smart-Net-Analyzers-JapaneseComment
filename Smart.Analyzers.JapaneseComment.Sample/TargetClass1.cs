@@ -14,6 +14,9 @@ namespace Smart.Analyzers.JapaneseComment.Sample
             /* ？ */
             /* ： */
             /// １
+
+            // ’
+            // ”
         }
     }
 }

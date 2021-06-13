@@ -256,7 +256,7 @@ namespace Smart.Analyzers.JapaneseComment
             description: string.Empty);
 
         private static readonly DiagnosticDescriptor RuleWideYen = new(
-            id: RuleIdentifiers.CurlyBracketInCommentShouldBeNarrow,
+            id: RuleIdentifiers.YenInCommentShouldBeNarrow,
             title: "\"￥\" in comment should be narrow",
             messageFormat: "\"￥\" in comment should be narrow",
             category: "Style",
