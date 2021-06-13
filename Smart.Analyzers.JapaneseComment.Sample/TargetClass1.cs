@@ -11,7 +11,8 @@ namespace Smart.Analyzers.JapaneseComment.Sample
         {
             // １
             /* [　] */
-            /* ＃ */
+            /* ？ */
+            /* ： */
             /// １
         }
     }
