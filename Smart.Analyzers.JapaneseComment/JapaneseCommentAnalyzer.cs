@@ -302,7 +302,7 @@ namespace Smart.Analyzers.JapaneseComment
             context.RegisterSyntaxTreeAction(AnalyzeComment);
         }
 
-        private void AnalyzeComment(SyntaxTreeAnalysisContext context)
+        private static void AnalyzeComment(SyntaxTreeAnalysisContext context)
         {
             var root = context.Tree.GetCompilationUnitRoot(context.CancellationToken);
             var commentNodes = root.DescendantTrivia()
