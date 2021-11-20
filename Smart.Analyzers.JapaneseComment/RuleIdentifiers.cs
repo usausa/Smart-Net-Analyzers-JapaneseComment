@@ -1,6 +1,5 @@
 namespace Smart.Analyzers.JapaneseComment;
 
-// ReSharper disable once InconsistentNaming
 internal static class RuleIdentifiers
 {
     public const string KanaCharacterInCommentShouldBeWide = "SAJ0001";
