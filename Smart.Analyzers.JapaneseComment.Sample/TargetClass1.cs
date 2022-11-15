@@ -2,6 +2,7 @@ namespace Smart.Analyzers.JapaneseComment.Sample;
 
 // ｱｱｱ
 // ＡＡＡ
+#pragma warning disable CA1052
 public class TargetClass1
 {
     /// <summary>
@@ -19,3 +20,4 @@ public class TargetClass1
         // ”
     }
 }
+#pragma warning restore CA1052
