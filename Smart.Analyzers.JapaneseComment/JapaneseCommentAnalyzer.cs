@@ -304,9 +304,9 @@ public class JapaneseCommentAnalyzer : DiagnosticAnalyzer
     {
         var root = context.Tree.GetCompilationUnitRoot(context.CancellationToken);
         var commentNodes = root.DescendantTrivia()
-            .Where(x => x.IsKind(SyntaxKind.MultiLineCommentTrivia) ||
-                        x.IsKind(SyntaxKind.SingleLineCommentTrivia) ||
-                        x.IsKind(SyntaxKind.DocumentationCommentExteriorTrivia));
+            .Where(static x => x.IsKind(SyntaxKind.MultiLineCommentTrivia) ||
+                               x.IsKind(SyntaxKind.SingleLineCommentTrivia) ||
+                               x.IsKind(SyntaxKind.DocumentationCommentExteriorTrivia));
 
         foreach (var node in commentNodes)
         {
