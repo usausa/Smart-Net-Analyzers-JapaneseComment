@@ -20,7 +20,6 @@
     <PackageId>Usa.Smart.Analyzers.JapaneseComment</PackageId>
     <Title>Smart.Analyzers.JapaneseComment</Title>
     <Description>Smart japanese comment analyzers</Description>
-    <Summary>Smart japanese comment analyzers</Summary>
     <PackageTags>smart analyzers japanese</PackageTags>
   </PropertyGroup>
 
