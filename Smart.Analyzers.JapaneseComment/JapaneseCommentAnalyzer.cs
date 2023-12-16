@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class JapaneseCommentAnalyzer : DiagnosticAnalyzer
+public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
 {
     private static readonly DiagnosticDescriptor RuleNarrowKana = new(
         id: RuleIdentifiers.KanaCharacterInCommentShouldBeWide,
