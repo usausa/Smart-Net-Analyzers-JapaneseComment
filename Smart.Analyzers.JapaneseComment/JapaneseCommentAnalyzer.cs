@@ -262,7 +262,8 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         isEnabledByDefault: true,
         description: string.Empty);
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+    [
         RuleNarrowKana,
         RuleWideAlphabet,
         RuleWideNumeric,
@@ -290,7 +291,8 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         RuleWideCurlyBracket,
         RuleWideYen,
         RuleWideSingleQuotation,
-        RuleWideDoubleQuotation);
+        RuleWideDoubleQuotation
+    ];
 
     public override void Initialize(AnalysisContext context)
     {
