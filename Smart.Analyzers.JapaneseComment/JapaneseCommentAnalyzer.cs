@@ -305,22 +305,33 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
     private static void AnalyzeComment(SyntaxTreeAnalysisContext context)
     {
         var root = context.Tree.GetCompilationUnitRoot(context.CancellationToken);
-        var commentNodes = root.DescendantTrivia()
-            .Where(static x => x.IsKind(SyntaxKind.MultiLineCommentTrivia) ||
-                               x.IsKind(SyntaxKind.SingleLineCommentTrivia) ||
-                               x.IsKind(SyntaxKind.DocumentationCommentExteriorTrivia));
 
-        foreach (var node in commentNodes)
+        foreach (var trivia in root.DescendantTrivia())
         {
-            switch (node.Kind())
+            var kind = trivia.Kind();
+            if ((kind != SyntaxKind.MultiLineCommentTrivia) &&
+                (kind != SyntaxKind.SingleLineCommentTrivia) &&
+                (kind != SyntaxKind.DocumentationCommentExteriorTrivia))
             {
+                continue;
+            }
+
+            var span = trivia.ToString().AsSpan();
+            switch (kind)
+            {
+                case SyntaxKind.MultiLineCommentTrivia:
+                    if (span.Length >= 4)
+                    {
+                        CheckRules(context, trivia, span.Slice(2, span.Length - 4));
+                    }
+                    break;
                 case SyntaxKind.SingleLineCommentTrivia:
                 case SyntaxKind.DocumentationCommentExteriorTrivia:
-                    CheckRules(context, node, node.ToString().TrimStart('/').AsSpan());
-                    break;
-                case SyntaxKind.MultiLineCommentTrivia:
-                    var text = node.ToString();
-                    CheckRules(context, node, text.AsSpan(2, text.Length - 4));
+                    span = span.TrimStart('/');
+                    if (!span.IsEmpty)
+                    {
+                        CheckRules(context, trivia, span);
+                    }
                     break;
             }
         }
