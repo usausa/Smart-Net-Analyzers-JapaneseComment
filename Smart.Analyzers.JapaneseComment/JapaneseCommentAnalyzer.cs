@@ -10,6 +10,40 @@ using Microsoft.CodeAnalysis.Diagnostics;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
 {
+    [Flags]
+    private enum CommentCharFlags : uint
+    {
+        None = 0,
+        NarrowKana = 1u << 0,
+        WideAlphabet = 1u << 1,
+        WideNumeric = 1u << 2,
+        WideSpace = 1u << 3,
+        WideSingleQuotation = 1u << 4,
+        WideDoubleQuotation = 1u << 5,
+        WideExclamation = 1u << 6,
+        WideSharp = 1u << 7,
+        WideDollar = 1u << 8,
+        WidePercent = 1u << 9,
+        WideAmpersand = 1u << 10,
+        WideParenthesis = 1u << 11,
+        WideAsterisk = 1u << 12,
+        WidePlus = 1u << 13,
+        WideComma = 1u << 14,
+        WideHyphen = 1u << 15,
+        WideDot = 1u << 16,
+        WideSlash = 1u << 17,
+        WideColon = 1u << 18,
+        WideSemicolon = 1u << 19,
+        WideLessThan = 1u << 20,
+        WideEquals = 1u << 21,
+        WideGreaterThan = 1u << 22,
+        WideQuestion = 1u << 23,
+        WideAtMark = 1u << 24,
+        WideSquareBracket = 1u << 25,
+        WideCurlyBracket = 1u << 26,
+        WideYen = 1u << 27
+    }
+
     private static readonly DiagnosticDescriptor RuleNarrowKana = new(
         id: RuleIdentifiers.KanaCharacterInCommentShouldBeWide,
         title: "Kana character in comment should be wide",
@@ -326,11 +360,15 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
                     }
                     break;
                 case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.DocumentationCommentExteriorTrivia:
-                    span = span.TrimStart('/');
-                    if (!span.IsEmpty)
+                    if (span.Length > 2)
                     {
-                        CheckRules(context, trivia, span);
+                        CheckRules(context, trivia, span.Slice(2));
+                    }
+                    break;
+                case SyntaxKind.DocumentationCommentExteriorTrivia:
+                    if (span.Length > 3)
+                    {
+                        CheckRules(context, trivia, span.Slice(3));
                     }
                     break;
             }
@@ -339,130 +377,98 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
 
     private static void CheckRules(SyntaxTreeAnalysisContext context, SyntaxTrivia node, ReadOnlySpan<char> range)
     {
-        var narrowKanaExist = false;
-        var wideAlphabetExist = false;
-        var wideNumericExist = false;
-        var wideSpaceExist = false;
-        var wideSingleQuotationExist = false;
-        var wideDoubleQuotationExist = false;
-        var wideExclamationExist = false;
-        var wideSharpExist = false;
-        var wideDollarExist = false;
-        var widePercentExist = false;
-        var wideAmpersandExist = false;
-        var wideParenthesisExist = false;
-        var wideAsteriskExist = false;
-        var widePlusExist = false;
-        var wideCommaExist = false;
-        var wideHyphenExist = false;
-        var wideDotExist = false;
-        var wideSlashExist = false;
-        var wideColonExist = false;
-        var wideSemicolonExist = false;
-        var wideLessThanExist = false;
-        var wideEqualsExist = false;
-        var wideGreaterThanExist = false;
-        var wideQuestionExist = false;
-        var wideAtMarkExist = false;
-        var wideSquareBracketExist = false;
-        var wideCurlyBracketExist = false;
-        var wideYenExist = false;
+        var flags = AnalyzeCharacters(range);
+        var location = node.GetLocation();
 
-        foreach (var c in range)
+        if ((flags & CommentCharFlags.NarrowKana) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleNarrowKana, location));
+        if ((flags & CommentCharFlags.WideAlphabet) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideAlphabet, location));
+        if ((flags & CommentCharFlags.WideNumeric) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideNumeric, location));
+        if ((flags & CommentCharFlags.WideSpace) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideSpace, location));
+        if ((flags & CommentCharFlags.WideSingleQuotation) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideSingleQuotation, location));
+        if ((flags & CommentCharFlags.WideDoubleQuotation) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideDoubleQuotation, location));
+        if ((flags & CommentCharFlags.WideExclamation) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideExclamation, location));
+        if ((flags & CommentCharFlags.WideSharp) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideSharp, location));
+        if ((flags & CommentCharFlags.WideDollar) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideDollar, location));
+        if ((flags & CommentCharFlags.WidePercent) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWidePercent, location));
+        if ((flags & CommentCharFlags.WideAmpersand) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideAmpersand, location));
+        if ((flags & CommentCharFlags.WideParenthesis) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideParenthesis, location));
+        if ((flags & CommentCharFlags.WideAsterisk) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideAsterisk, location));
+        if ((flags & CommentCharFlags.WidePlus) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWidePlus, location));
+        if ((flags & CommentCharFlags.WideComma) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideComma, location));
+        if ((flags & CommentCharFlags.WideHyphen) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideHyphen, location));
+        if ((flags & CommentCharFlags.WideDot) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideDot, location));
+        if ((flags & CommentCharFlags.WideSlash) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideSlash, location));
+        if ((flags & CommentCharFlags.WideColon) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideColon, location));
+        if ((flags & CommentCharFlags.WideSemicolon) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideSemicolon, location));
+        if ((flags & CommentCharFlags.WideLessThan) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideLessThan, location));
+        if ((flags & CommentCharFlags.WideEquals) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideEquals, location));
+        if ((flags & CommentCharFlags.WideGreaterThan) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideGreaterThan, location));
+        if ((flags & CommentCharFlags.WideQuestion) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideQuestion, location));
+        if ((flags & CommentCharFlags.WideAtMark) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideAtMark, location));
+        if ((flags & CommentCharFlags.WideSquareBracket) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideSquareBracket, location));
+        if ((flags & CommentCharFlags.WideCurlyBracket) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideCurlyBracket, location));
+        if ((flags & CommentCharFlags.WideYen) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideYen, location));
+    }
+
+    private static CommentCharFlags AnalyzeCharacters(ReadOnlySpan<char> range)
+    {
+        var flags = CommentCharFlags.None;
+        for (var i = 0; i < range.Length; i++)
         {
-            if (!narrowKanaExist && IsNarrowKana(c)) narrowKanaExist = true;
-            if (!wideAlphabetExist && IsWideAlphabet(c)) wideAlphabetExist = true;
-            if (!wideNumericExist && IsWideNumeric(c)) wideNumericExist = true;
-            if (!wideSpaceExist && (c == '　')) wideSpaceExist = true;
-
-            if (!wideSingleQuotationExist && (c == '’')) wideSingleQuotationExist = true;
-            if (!wideDoubleQuotationExist && (c == '”')) wideDoubleQuotationExist = true;
-
-            if (!wideExclamationExist && (c == '！')) wideExclamationExist = true;
-            if (!wideSharpExist && (c == '＃')) wideSharpExist = true;
-            if (!wideDollarExist && (c == '＄')) wideDollarExist = true;
-            if (!widePercentExist && (c == '％')) widePercentExist = true;
-            if (!wideAmpersandExist && (c == '＆')) wideAmpersandExist = true;
-
-            if (!wideParenthesisExist && ((c == '（') || (c == '）'))) wideParenthesisExist = true;
-
-            if (!wideAsteriskExist && (c == '＊')) wideAsteriskExist = true;
-            if (!widePlusExist && (c == '＋')) widePlusExist = true;
-            if (!wideCommaExist && (c == '，')) wideCommaExist = true;
-            if (!wideHyphenExist && (c == '－')) wideHyphenExist = true;
-            if (!wideDotExist && (c == '．')) wideDotExist = true;
-            if (!wideSlashExist && (c == '／')) wideSlashExist = true;
-            if (!wideColonExist && (c == '：')) wideColonExist = true;
-            if (!wideSemicolonExist && (c == '；')) wideSemicolonExist = true;
-            if (!wideLessThanExist && (c == '＜')) wideLessThanExist = true;
-            if (!wideEqualsExist && (c == '＝')) wideEqualsExist = true;
-            if (!wideGreaterThanExist && (c == '＞')) wideGreaterThanExist = true;
-            if (!wideQuestionExist && (c == '？')) wideQuestionExist = true;
-            if (!wideAtMarkExist && (c == '＠')) wideAtMarkExist = true;
-
-            if (!wideSquareBracketExist && ((c == '［') || (c == '］'))) wideSquareBracketExist = true;
-            if (!wideCurlyBracketExist && ((c == '｛') || (c == '｝'))) wideCurlyBracketExist = true;
-
-            if (!wideYenExist && (c == '￥')) wideYenExist = true;
+            flags |= Classify(range[i]);
         }
 
-        if (narrowKanaExist) context.ReportDiagnostic(Diagnostic.Create(RuleNarrowKana, node.GetLocation()));
-        if (wideAlphabetExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideAlphabet, node.GetLocation()));
-        if (wideNumericExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideNumeric, node.GetLocation()));
-        if (wideSpaceExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideSpace, node.GetLocation()));
-
-        if (wideSingleQuotationExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideSingleQuotation, node.GetLocation()));
-        if (wideDoubleQuotationExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideDoubleQuotation, node.GetLocation()));
-
-        if (wideExclamationExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideExclamation, node.GetLocation()));
-        if (wideSharpExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideSharp, node.GetLocation()));
-        if (wideDollarExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideDollar, node.GetLocation()));
-        if (widePercentExist) context.ReportDiagnostic(Diagnostic.Create(RuleWidePercent, node.GetLocation()));
-        if (wideAmpersandExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideAmpersand, node.GetLocation()));
-
-        if (wideParenthesisExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideParenthesis, node.GetLocation()));
-
-        if (wideAsteriskExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideAsterisk, node.GetLocation()));
-        if (widePlusExist) context.ReportDiagnostic(Diagnostic.Create(RuleWidePlus, node.GetLocation()));
-        if (wideCommaExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideComma, node.GetLocation()));
-        if (wideHyphenExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideHyphen, node.GetLocation()));
-        if (wideDotExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideDot, node.GetLocation()));
-        if (wideSlashExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideSlash, node.GetLocation()));
-        if (wideColonExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideColon, node.GetLocation()));
-        if (wideSemicolonExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideSemicolon, node.GetLocation()));
-        if (wideLessThanExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideLessThan, node.GetLocation()));
-        if (wideEqualsExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideEquals, node.GetLocation()));
-        if (wideGreaterThanExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideGreaterThan, node.GetLocation()));
-        if (wideQuestionExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideQuestion, node.GetLocation()));
-        if (wideAtMarkExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideAtMark, node.GetLocation()));
-
-        if (wideSquareBracketExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideSquareBracket, node.GetLocation()));
-        if (wideCurlyBracketExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideCurlyBracket, node.GetLocation()));
-
-        if (wideYenExist) context.ReportDiagnostic(Diagnostic.Create(RuleWideYen, node.GetLocation()));
+        return flags;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool IsNarrowKana(char c)
+    private static CommentCharFlags Classify(char c)
     {
-        return (c >= 0xFF61) && (c <= 0xFF9F);
+        if (IsNarrowKana(c)) return CommentCharFlags.NarrowKana;
+        if (IsWideAlphabet(c)) return CommentCharFlags.WideAlphabet;
+        if (IsWideNumeric(c)) return CommentCharFlags.WideNumeric;
+
+        return c switch
+        {
+            '　' => CommentCharFlags.WideSpace,
+            '’' => CommentCharFlags.WideSingleQuotation,
+            '”' => CommentCharFlags.WideDoubleQuotation,
+            '！' => CommentCharFlags.WideExclamation,
+            '＃' => CommentCharFlags.WideSharp,
+            '＄' => CommentCharFlags.WideDollar,
+            '％' => CommentCharFlags.WidePercent,
+            '＆' => CommentCharFlags.WideAmpersand,
+            '（' or '）' => CommentCharFlags.WideParenthesis,
+            '＊' => CommentCharFlags.WideAsterisk,
+            '＋' => CommentCharFlags.WidePlus,
+            '，' => CommentCharFlags.WideComma,
+            '－' => CommentCharFlags.WideHyphen,
+            '．' => CommentCharFlags.WideDot,
+            '／' => CommentCharFlags.WideSlash,
+            '：' => CommentCharFlags.WideColon,
+            '；' => CommentCharFlags.WideSemicolon,
+            '＜' => CommentCharFlags.WideLessThan,
+            '＝' => CommentCharFlags.WideEquals,
+            '＞' => CommentCharFlags.WideGreaterThan,
+            '？' => CommentCharFlags.WideQuestion,
+            '＠' => CommentCharFlags.WideAtMark,
+            '［' or '］' => CommentCharFlags.WideSquareBracket,
+            '｛' or '｝' => CommentCharFlags.WideCurlyBracket,
+            '￥' => CommentCharFlags.WideYen,
+            _ => CommentCharFlags.None
+        };
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool IsWideAlphabet(char c)
-    {
-        // Ａ-Ｚ
-        if (c < 0xFF21) return false;
-        if (c <= 0xFF3A) return true;
-        // ａ-ｚ
-        if (c < 0xFF41) return false;
-        if (c <= 0xFF5A) return true;
-        return false;
-    }
+    private static bool IsNarrowKana(char c) =>
+        (uint)(c - 0xFF61) <= 0xFF9F - 0xFF61;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool IsWideNumeric(char c)
-    {
-        return (c >= 0xFF10) && (c <= 0xFF19);
-    }
+    private static bool IsWideAlphabet(char c) =>
+        ((uint)(c - 0xFF21) <= 0xFF3A - 0xFF21) ||
+        ((uint)(c - 0xFF41) <= 0xFF5A - 0xFF41);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool IsWideNumeric(char c) =>
+        (uint)(c - 0xFF10) <= 0xFF19 - 0xFF10;
 }
