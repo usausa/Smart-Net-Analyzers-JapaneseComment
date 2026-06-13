@@ -51,7 +51,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Half-width kana characters in comments should be replaced with their full-width equivalents.");
 
     private static readonly DiagnosticDescriptor RuleWideAlphabet = new(
         id: RuleIdentifiers.AlphabetInCommentShouldBeNarrow,
@@ -60,7 +60,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width alphabet characters (Ａ-Ｚ, ａ-ｚ) in comments should be replaced with half-width characters (A-Z, a-z).");
 
     private static readonly DiagnosticDescriptor RuleWideNumeric = new(
         id: RuleIdentifiers.NumericCharacterInCommentShouldBeNarrow,
@@ -69,7 +69,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width numeric characters (０-９) in comments should be replaced with half-width characters (0-9).");
 
     private static readonly DiagnosticDescriptor RuleWideSpace = new(
         id: RuleIdentifiers.SpaceInCommentShouldBeNarrow,
@@ -78,7 +78,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width (ideographic) spaces in comments should be replaced with half-width spaces.");
 
     private static readonly DiagnosticDescriptor RuleWideSingleQuotation = new(
         id: RuleIdentifiers.SingleQuotationInCommentShouldBeNarrow,
@@ -87,7 +87,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width single quotation marks (’) in comments should be replaced with half-width apostrophes (').");
 
     private static readonly DiagnosticDescriptor RuleWideDoubleQuotation = new(
         id: RuleIdentifiers.DoubleQuotationInCommentShouldBeNarrow,
@@ -96,7 +96,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width double quotation marks (”) in comments should be replaced with half-width double quotes (\").");
 
     private static readonly DiagnosticDescriptor RuleWideExclamation = new(
         id: RuleIdentifiers.ExclamationInCommentShouldBeNarrow,
@@ -105,7 +105,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: false,  // Default off
-        description: string.Empty);
+        description: "Full-width '！' characters in comments should be replaced with half-width '!'.");
 
     private static readonly DiagnosticDescriptor RuleWideSharp = new(
         id: RuleIdentifiers.SharpInCommentShouldBeNarrow,
@@ -114,7 +114,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '＃' characters in comments should be replaced with half-width '#'.");
 
     private static readonly DiagnosticDescriptor RuleWideDollar = new(
         id: RuleIdentifiers.DollarInCommentShouldBeNarrow,
@@ -123,7 +123,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '＄' characters in comments should be replaced with half-width '$'.");
 
     private static readonly DiagnosticDescriptor RuleWidePercent = new(
         id: RuleIdentifiers.PercentInCommentShouldBeNarrow,
@@ -132,7 +132,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '％' characters in comments should be replaced with half-width '%'.");
 
     private static readonly DiagnosticDescriptor RuleWideAmpersand = new(
         id: RuleIdentifiers.AmpersandInCommentShouldBeNarrow,
@@ -141,7 +141,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: false,  // Default off
-        description: string.Empty);
+        description: "Full-width '＆' characters in comments should be replaced with half-width '&'.");
 
     private static readonly DiagnosticDescriptor RuleWideParenthesis = new(
         id: RuleIdentifiers.ParenthesisInCommentShouldBeNarrow,
@@ -150,7 +150,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width parentheses '（）' in comments should be replaced with half-width '()'.");
 
     private static readonly DiagnosticDescriptor RuleWideAsterisk = new(
         id: RuleIdentifiers.AsteriskInCommentShouldBeNarrow,
@@ -159,7 +159,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '＊' characters in comments should be replaced with half-width '*'.");
 
     private static readonly DiagnosticDescriptor RuleWidePlus = new(
         id: RuleIdentifiers.PlusInCommentShouldBeNarrow,
@@ -168,7 +168,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '＋' characters in comments should be replaced with half-width '+'.");
 
     private static readonly DiagnosticDescriptor RuleWideComma = new(
         id: RuleIdentifiers.CommaInCommentShouldBeNarrow,
@@ -177,7 +177,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: false,  // Default off
-        description: string.Empty);
+        description: "Full-width '，' characters in comments should be replaced with half-width ','.");
 
     private static readonly DiagnosticDescriptor RuleWideHyphen = new(
         id: RuleIdentifiers.HyphenInCommentShouldBeNarrow,
@@ -186,7 +186,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '－' characters in comments should be replaced with half-width '-'.");
 
     private static readonly DiagnosticDescriptor RuleWideDot = new(
         id: RuleIdentifiers.DotInCommentShouldBeNarrow,
@@ -195,7 +195,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: false,  // Default off
-        description: string.Empty);
+        description: "Full-width '．' characters in comments should be replaced with half-width '.'.");
 
     private static readonly DiagnosticDescriptor RuleWideSlash = new(
         id: RuleIdentifiers.SlashInCommentShouldBeNarrow,
@@ -204,7 +204,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '／' characters in comments should be replaced with half-width '/'.");
 
     private static readonly DiagnosticDescriptor RuleWideColon = new(
         id: RuleIdentifiers.ColonInCommentShouldBeNarrow,
@@ -213,7 +213,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '：' characters in comments should be replaced with half-width ':'.");
 
     private static readonly DiagnosticDescriptor RuleWideSemicolon = new(
         id: RuleIdentifiers.SemicolonInCommentShouldBeNarrow,
@@ -222,7 +222,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '；' characters in comments should be replaced with half-width ';'.");
 
     private static readonly DiagnosticDescriptor RuleWideLessThan = new(
         id: RuleIdentifiers.LessThanInCommentShouldBeNarrow,
@@ -231,7 +231,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '＜' characters in comments should be replaced with half-width '<'.");
 
     private static readonly DiagnosticDescriptor RuleWideEquals = new(
         id: RuleIdentifiers.EqualsInCommentShouldBeNarrow,
@@ -240,7 +240,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '＝' characters in comments should be replaced with half-width '='.");
 
     private static readonly DiagnosticDescriptor RuleWideGreaterThan = new(
         id: RuleIdentifiers.GreaterThanInCommentShouldBeNarrow,
@@ -249,7 +249,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '＞' characters in comments should be replaced with half-width '>'.");
 
     private static readonly DiagnosticDescriptor RuleWideQuestion = new(
         id: RuleIdentifiers.QuestionInCommentShouldBeNarrow,
@@ -258,7 +258,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: false,  // Default off
-        description: string.Empty);
+        description: "Full-width '？' characters in comments should be replaced with half-width '?'.");
 
     private static readonly DiagnosticDescriptor RuleWideAtMark = new(
         id: RuleIdentifiers.AtMarkInCommentShouldBeNarrow,
@@ -267,7 +267,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '＠' characters in comments should be replaced with half-width '@'.");
 
     private static readonly DiagnosticDescriptor RuleWideSquareBracket = new(
         id: RuleIdentifiers.SquareBracketInCommentShouldBeNarrow,
@@ -276,7 +276,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width square brackets '［］' in comments should be replaced with half-width '[]'.");
 
     private static readonly DiagnosticDescriptor RuleWideCurlyBracket = new(
         id: RuleIdentifiers.CurlyBracketInCommentShouldBeNarrow,
@@ -285,7 +285,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width curly brackets '｛｝' in comments should be replaced with half-width '{}'.");
 
     private static readonly DiagnosticDescriptor RuleWideYen = new(
         id: RuleIdentifiers.YenInCommentShouldBeNarrow,
@@ -294,7 +294,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: string.Empty);
+        description: "Full-width '￥' characters in comments should be replaced with half-width '\\'.");
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
     [
