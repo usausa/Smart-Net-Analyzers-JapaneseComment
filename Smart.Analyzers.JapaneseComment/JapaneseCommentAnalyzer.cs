@@ -294,7 +294,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: "Full-width '￥' characters in comments should be replaced with half-width '\\'.");
+        description: "Full-width '￥' characters in comments should be replaced with the half-width yen sign '¥'.");
 
     private static readonly ImmutableArray<DiagnosticDescriptor> Rules =
     [

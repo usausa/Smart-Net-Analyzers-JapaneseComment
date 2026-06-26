@@ -6,33 +6,36 @@ Roslyn analyzer that enforces character width conventions in C# code comments.
 
 ## Rules
 
-| Rule | Description |
-|---|---|
-| SAJ0001 | Kana characters in comments should be wide (no half-width kana) |
-| SAJ0002 | Alphabet characters in comments should be narrow (no full-width ABC) |
-| SAJ0003 | Numeric characters in comments should be narrow (no full-width 123) |
-| SAJ0004 | Space characters in comments should be narrow (no full-width space) |
-| SAJ2019 | Single quotation mark in comments should be narrow |
-| SAJ201D | Double quotation mark in comments should be narrow |
-| SAJFF01 | Exclamation mark in comments should be narrow |
-| SAJFF03 | Sharp sign in comments should be narrow |
-| SAJFF04 | Dollar sign in comments should be narrow |
-| SAJFF05 | Percent sign in comments should be narrow |
-| SAJFF06 | Ampersand in comments should be narrow |
-| SAJFF08 | Parentheses in comments should be narrow |
-| SAJFF0A | Asterisk in comments should be narrow |
-| SAJFF0B | Plus sign in comments should be narrow |
-| SAJFF0C | Comma in comments should be narrow |
-| SAJFF0D | Hyphen in comments should be narrow |
-| SAJFF0E | Dot in comments should be narrow |
-| SAJFF0F | Slash in comments should be narrow |
-| SAJFF1A | Colon in comments should be narrow |
-| SAJFF1B | Semicolon in comments should be narrow |
-| SAJFF1C | Less-than sign in comments should be narrow |
-| SAJFF1D | Equals sign in comments should be narrow |
-| SAJFF1E | Greater-than sign in comments should be narrow |
-| SAJFF1F | Question mark in comments should be narrow |
-| SAJFF20 | At mark in comments should be narrow |
-| SAJFF3B | Square brackets in comments should be narrow |
-| SAJFF5B | Curly brackets in comments should be narrow |
-| SAJFFE5 | Yen sign in comments should be narrow |
+Each rule flags a specific full-width character (or half-width kana) in comments and suggests its counterpart.
+Off-by-default rules must be enabled explicitly, e.g. `dotnet_diagnostic.SAJFF06.severity = warning` in `.editorconfig`.
+
+| Rule | Target | Replace with | Default |
+|---|:---:|:---:|:---:|
+| SAJ0001 | half-width kana (U+FF61–FF9F) | full-width kana | on |
+| SAJ0002 | `Ａ`-`Ｚ` `ａ`-`ｚ` | `A`-`Z` `a`-`z` | on |
+| SAJ0003 | `０`-`９` | `0`-`9` | on |
+| SAJ0004 | ideographic space (U+3000) | space | on |
+| SAJ2019 | `’` | `'` | on |
+| SAJ201D | `”` | `"` | on |
+| SAJFF01 | `！` | `!` | off |
+| SAJFF03 | `＃` | `#` | on |
+| SAJFF04 | `＄` | `$` | on |
+| SAJFF05 | `％` | `%` | on |
+| SAJFF06 | `＆` | `&` | off |
+| SAJFF08 | `（` `）` | `(` `)` | on |
+| SAJFF0A | `＊` | `*` | on |
+| SAJFF0B | `＋` | `+` | on |
+| SAJFF0C | `，` | `,` | off |
+| SAJFF0D | `－` | `-` | on |
+| SAJFF0E | `．` | `.` | off |
+| SAJFF0F | `／` | `/` | on |
+| SAJFF1A | `：` | `:` | on |
+| SAJFF1B | `；` | `;` | on |
+| SAJFF1C | `＜` | `<` | on |
+| SAJFF1D | `＝` | `=` | on |
+| SAJFF1E | `＞` | `>` | on |
+| SAJFF1F | `？` | `?` | off |
+| SAJFF20 | `＠` | `@` | on |
+| SAJFF3B | `［` `］` | `[` `]` | on |
+| SAJFF5B | `｛` `｝` | `{` `}` | on |
+| SAJFFE5 | `￥` | `¥` | on |
