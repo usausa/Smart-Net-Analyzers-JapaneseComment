@@ -76,6 +76,25 @@ public sealed class CommentCharacterTest
     [Theory]
     [InlineData("/**/")]
     [InlineData("/* ascii */")]
-    public void MultiLineCommentWithoutTargetReportsNothing(string source) =>
+    public void MultiLineCommentWithoutTargetReportsNothing(string source)
+    {
         Assert.Empty(AnalyzerTestRunner.Run(source));
+    }
+
+    [Fact]
+    public void UnterminatedMultiLineCommentContentIsChecked()
+    {
+        var diagnostics = AnalyzerTestRunner.Run("/* ｱ");
+
+        var diagnostic = Assert.Single(diagnostics);
+        Assert.Equal(RuleIdentifiers.KanaCharacterInCommentShouldBeWide, diagnostic.Id);
+    }
+
+    [Theory]
+    [InlineData("/*")]
+    [InlineData("/* ascii")]
+    public void UnterminatedMultiLineCommentWithoutTargetReportsNothing(string source)
+    {
+        Assert.Empty(AnalyzerTestRunner.Run(source));
+    }
 }

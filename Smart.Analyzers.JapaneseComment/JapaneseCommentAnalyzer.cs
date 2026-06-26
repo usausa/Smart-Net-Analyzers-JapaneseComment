@@ -349,7 +349,8 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
             var kind = trivia.Kind();
             if ((kind != SyntaxKind.MultiLineCommentTrivia) &&
                 (kind != SyntaxKind.SingleLineCommentTrivia) &&
-                (kind != SyntaxKind.DocumentationCommentExteriorTrivia))
+                (kind != SyntaxKind.SingleLineDocumentationCommentTrivia) &&
+                (kind != SyntaxKind.MultiLineDocumentationCommentTrivia))
             {
                 continue;
             }
@@ -358,9 +359,15 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
             switch (kind)
             {
                 case SyntaxKind.MultiLineCommentTrivia:
-                    if (span.Length >= 4)
+                    var range = span.Slice(2);
+                    if ((range.Length >= 2) && (range[range.Length - 2] == '*') && (range[range.Length - 1] == '/'))
                     {
-                        CheckRules(context, trivia, span.Slice(2, span.Length - 4));
+                        range = range.Slice(0, range.Length - 2);
+                    }
+
+                    if (!range.IsEmpty)
+                    {
+                        CheckRules(context, trivia, range);
                     }
                     break;
                 case SyntaxKind.SingleLineCommentTrivia:
@@ -369,11 +376,9 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
                         CheckRules(context, trivia, span.Slice(2));
                     }
                     break;
-                case SyntaxKind.DocumentationCommentExteriorTrivia:
-                    if (span.Length > 3)
-                    {
-                        CheckRules(context, trivia, span.Slice(3));
-                    }
+                case SyntaxKind.SingleLineDocumentationCommentTrivia:
+                case SyntaxKind.MultiLineDocumentationCommentTrivia:
+                    CheckRules(context, trivia, span);
                     break;
             }
         }

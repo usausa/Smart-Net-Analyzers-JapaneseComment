@@ -4,19 +4,21 @@ using Microsoft.CodeAnalysis;
 
 public sealed class DocumentationCommentTest
 {
-    [Fact]
-    public void TripleSlashContentIsCheckedWithoutDocumentationParsing()
+    [Theory]
+    [InlineData(DocumentationMode.None)]
+    [InlineData(DocumentationMode.Parse)]
+    public void TripleSlashContentIsChecked(DocumentationMode mode)
     {
-        // DocumentationMode.None: /// is lexed as an ordinary single-line comment, so its content
-        // is analyzed. This mirrors a typical project without GenerateDocumentationFile.
-        var diagnostics = AnalyzerTestRunner.Run("/// ｱ", DocumentationMode.None);
+        var diagnostics = AnalyzerTestRunner.Run("/// ｱ", mode);
 
         var diagnostic = Assert.Single(diagnostics);
         Assert.Equal(RuleIdentifiers.KanaCharacterInCommentShouldBeWide, diagnostic.Id);
     }
 
-    [Fact]
-    public void XmlSummaryContentIsCheckedWithoutDocumentationParsing()
+    [Theory]
+    [InlineData(DocumentationMode.None)]
+    [InlineData(DocumentationMode.Parse)]
+    public void XmlSummaryContentIsChecked(DocumentationMode mode)
     {
         const string source =
             """
@@ -24,30 +26,42 @@ public sealed class DocumentationCommentTest
             class C { }
             """;
 
-        var diagnostics = AnalyzerTestRunner.Run(source, DocumentationMode.None);
+        var diagnostics = AnalyzerTestRunner.Run(source, mode);
+
+        var diagnostic = Assert.Single(diagnostics);
+        Assert.Equal(RuleIdentifiers.KanaCharacterInCommentShouldBeWide, diagnostic.Id);
+    }
+
+    [Theory]
+    [InlineData(DocumentationMode.None)]
+    [InlineData(DocumentationMode.Parse)]
+    public void MultiLineDocumentationCommentContentIsChecked(DocumentationMode mode)
+    {
+        var diagnostics = AnalyzerTestRunner.Run("/** ｱ */", mode);
 
         var diagnostic = Assert.Single(diagnostics);
         Assert.Equal(RuleIdentifiers.KanaCharacterInCommentShouldBeWide, diagnostic.Id);
     }
 
     [Fact]
-    public void TripleSlashContentIsCurrentlyMissedWhenDocumentationParsingEnabled()
+    public void XmlTagsAndAttributeNamesAreNotFalsePositives()
     {
-        // Characterization of CURRENT behavior (see 実装プランGPT-5.5.md section 2 / task P2-1).
-        //
-        // With DocumentationMode.Parse the /// becomes structured documentation trivia and the text
-        // "ｱ" is an XML token rather than comment trivia, so the analyzer does NOT see it. This is the
-        // documented gap: when P2-1 is implemented, this expectation must flip to a single SAJ0001.
-        var diagnostics = AnalyzerTestRunner.Run("/// ｱ", DocumentationMode.Parse);
+        const string source =
+            """
+            /// <summary>ascii</summary>
+            /// <param name="value">ok</param>
+            class C { }
+            """;
 
-        Assert.Empty(diagnostics);
+        Assert.Empty(AnalyzerTestRunner.Run(source, DocumentationMode.Parse));
     }
 
-    [Fact]
-    public void OrdinaryCommentIsUnaffectedByDocumentationParsing()
+    [Theory]
+    [InlineData(DocumentationMode.None)]
+    [InlineData(DocumentationMode.Parse)]
+    public void OrdinaryCommentIsUnaffectedByDocumentationParsing(DocumentationMode mode)
     {
-        // Regular // comments behave identically regardless of documentation mode.
-        var diagnostics = AnalyzerTestRunner.Run("// ｱ", DocumentationMode.Parse);
+        var diagnostics = AnalyzerTestRunner.Run("// ｱ", mode);
 
         var diagnostic = Assert.Single(diagnostics);
         Assert.Equal(RuleIdentifiers.KanaCharacterInCommentShouldBeWide, diagnostic.Id);
