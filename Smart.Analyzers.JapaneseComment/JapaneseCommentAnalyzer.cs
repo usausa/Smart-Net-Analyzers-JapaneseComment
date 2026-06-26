@@ -342,6 +342,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
     {
         var root = context.Tree.GetCompilationUnitRoot(context.CancellationToken);
 
+        string? source = null;
         foreach (var trivia in root.DescendantTrivia())
         {
             context.CancellationToken.ThrowIfCancellationRequested();
@@ -355,7 +356,8 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
                 continue;
             }
 
-            var span = trivia.ToString().AsSpan();
+            source ??= context.Tree.GetText(context.CancellationToken).ToString();
+            var span = source.AsSpan(trivia.SpanStart, trivia.Span.Length);
             switch (kind)
             {
                 case SyntaxKind.MultiLineCommentTrivia:
