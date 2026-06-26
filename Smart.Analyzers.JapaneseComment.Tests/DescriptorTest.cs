@@ -9,8 +9,17 @@ public sealed class DescriptorTest
         var descriptors = analyzer.SupportedDiagnostics;
 
         Assert.Equal(28, descriptors.Length);
-        Assert.Equal(
-            descriptors.Length,
-            descriptors.Select(static d => d.Id).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(descriptors.Length, descriptors.Select(static d => d.Id).Distinct(StringComparer.Ordinal).Count());
+    }
+
+    [Fact]
+    public void SupportedDiagnosticsReturnsCachedInstance()
+    {
+        var analyzer = new JapaneseCommentAnalyzer();
+
+        var first = analyzer.SupportedDiagnostics;
+        var second = analyzer.SupportedDiagnostics;
+
+        Assert.True(first == second);
     }
 }

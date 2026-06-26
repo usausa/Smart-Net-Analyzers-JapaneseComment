@@ -137,7 +137,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
     private static readonly DiagnosticDescriptor RuleWideAmpersand = new(
         id: RuleIdentifiers.AmpersandInCommentShouldBeNarrow,
         title: "\"＆\" in comment should be narrow",
-        messageFormat: "\"％\" in comment should be narrow",
+        messageFormat: "\"＆\" in comment should be narrow",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: false,  // Default off
@@ -296,7 +296,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         isEnabledByDefault: true,
         description: "Full-width '￥' characters in comments should be replaced with half-width '\\'.");
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+    private static readonly ImmutableArray<DiagnosticDescriptor> Rules =
     [
         RuleNarrowKana,
         RuleWideAlphabet,
@@ -328,6 +328,8 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         RuleWideDoubleQuotation
     ];
 
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => Rules;
+
     public override void Initialize(AnalysisContext context)
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
@@ -342,6 +344,8 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
 
         foreach (var trivia in root.DescendantTrivia())
         {
+            context.CancellationToken.ThrowIfCancellationRequested();
+
             var kind = trivia.Kind();
             if ((kind != SyntaxKind.MultiLineCommentTrivia) &&
                 (kind != SyntaxKind.SingleLineCommentTrivia) &&
@@ -377,7 +381,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
 
     private static void CheckRules(SyntaxTreeAnalysisContext context, SyntaxTrivia node, ReadOnlySpan<char> range)
     {
-        var flags = AnalyzeCharacters(range);
+        var flags = AnalyzeCharacters(range, context.CancellationToken);
         var location = node.GetLocation();
 
         if ((flags & CommentCharFlags.NarrowKana) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleNarrowKana, location));
@@ -410,11 +414,16 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         if ((flags & CommentCharFlags.WideYen) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideYen, location));
     }
 
-    private static CommentCharFlags AnalyzeCharacters(ReadOnlySpan<char> range)
+    private static CommentCharFlags AnalyzeCharacters(ReadOnlySpan<char> range, CancellationToken cancellationToken)
     {
         var flags = CommentCharFlags.None;
         for (var i = 0; i < range.Length; i++)
         {
+            if ((i & 0x3FFF) == 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
             flags |= Classify(range[i]);
         }
 
