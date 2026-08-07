@@ -13,6 +13,6 @@
     <File Path="Smart.Analyzers.JapaneseComment.sln.DotSettings" />
   </Folder>
   <Project Path="Smart.Analyzers.JapaneseComment/Smart.Analyzers.JapaneseComment.csproj" />
-  <Project Path="Smart.Analyzers.JapaneseComment.Sample/Smart.Analyzers.JapaneseComment.Sample.csproj" />
+  <Project Path="Smart.Analyzers.JapaneseComment.Sample/Smart.Analyzers.JapaneseComment.Sample.csproj" DefaultStartup="true" />
   <Project Path="Smart.Analyzers.JapaneseComment.Tests/Smart.Analyzers.JapaneseComment.Tests.csproj" />
 </Solution>
