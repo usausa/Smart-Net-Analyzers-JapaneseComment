@@ -44,257 +44,229 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         WideYen = 1u << 27
     }
 
-    private static readonly DiagnosticDescriptor RuleNarrowKana = new(
+    private static DiagnosticDescriptor RuleNarrowKana { get; } = new(
         id: RuleIdentifiers.KanaCharacterInCommentShouldBeWide,
-        title: "Kana character in comment should be wide",
-        messageFormat: "Kana character in comment should be wide",
+        title: "Kana should be wide",
+        messageFormat: "Half-width kana (U+FF61-FF9F) is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Half-width kana characters in comments should be replaced with their full-width equivalents.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideAlphabet = new(
+    private static DiagnosticDescriptor RuleWideAlphabet { get; } = new(
         id: RuleIdentifiers.AlphabetInCommentShouldBeNarrow,
-        title: "Alphabet in comment should be narrow",
-        messageFormat: "Alphabet character in comment should be narrow",
+        title: "Alphabet should be narrow",
+        messageFormat: "Full-width alphabet (Ａ-Ｚ, ａ-ｚ) is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width alphabet characters (Ａ-Ｚ, ａ-ｚ) in comments should be replaced with half-width characters (A-Z, a-z).");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideNumeric = new(
+    private static DiagnosticDescriptor RuleWideNumeric { get; } = new(
         id: RuleIdentifiers.NumericCharacterInCommentShouldBeNarrow,
-        title: "Numeric character in comment should be narrow",
-        messageFormat: "Numeric character in comment should be narrow",
+        title: "Numeric should be narrow",
+        messageFormat: "Full-width numeric (０-９) is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width numeric characters (０-９) in comments should be replaced with half-width characters (0-9).");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideSpace = new(
+    private static DiagnosticDescriptor RuleWideSpace { get; } = new(
         id: RuleIdentifiers.SpaceInCommentShouldBeNarrow,
-        title: "Space in comment should be narrow",
-        messageFormat: "Space in comment should be narrow",
+        title: "Space should be narrow",
+        messageFormat: "Full-width space (U+3000) is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width (ideographic) spaces in comments should be replaced with half-width spaces.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideSingleQuotation = new(
+    private static DiagnosticDescriptor RuleWideSingleQuotation { get; } = new(
         id: RuleIdentifiers.SingleQuotationInCommentShouldBeNarrow,
-        title: "\"’\" in comment should be narrow",
-        messageFormat: "\"’\" in comment should be narrow",
+        title: "'’' should be narrow",
+        messageFormat: "Full-width '’' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width single quotation marks (’) in comments should be replaced with half-width apostrophes (').");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideDoubleQuotation = new(
+    private static DiagnosticDescriptor RuleWideDoubleQuotation { get; } = new(
         id: RuleIdentifiers.DoubleQuotationInCommentShouldBeNarrow,
-        title: "\"”\" in comment should be narrow",
-        messageFormat: "\"”\" in comment should be narrow",
+        title: "'”' should be narrow",
+        messageFormat: "Full-width '”' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width double quotation marks (”) in comments should be replaced with half-width double quotes (\").");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideExclamation = new(
+    private static DiagnosticDescriptor RuleWideExclamation { get; } = new(
         id: RuleIdentifiers.ExclamationInCommentShouldBeNarrow,
-        title: "\"！\" in comment should be narrow",
-        messageFormat: "\"！\" in comment should be narrow",
+        title: "'！' should be narrow",
+        messageFormat: "Full-width '！' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: false,  // Default off
-        description: "Full-width '！' characters in comments should be replaced with half-width '!'.");
+        isEnabledByDefault: false);  // Default off
 
-    private static readonly DiagnosticDescriptor RuleWideSharp = new(
+    private static DiagnosticDescriptor RuleWideSharp { get; } = new(
         id: RuleIdentifiers.SharpInCommentShouldBeNarrow,
-        title: "\"＃\" in comment should be narrow",
-        messageFormat: "\"＃\" in comment should be narrow",
+        title: "'＃' should be narrow",
+        messageFormat: "Full-width '＃' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '＃' characters in comments should be replaced with half-width '#'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideDollar = new(
+    private static DiagnosticDescriptor RuleWideDollar { get; } = new(
         id: RuleIdentifiers.DollarInCommentShouldBeNarrow,
-        title: "\"＄\" in comment should be narrow",
-        messageFormat: "\"＄\" in comment should be narrow",
+        title: "'＄' should be narrow",
+        messageFormat: "Full-width '＄' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '＄' characters in comments should be replaced with half-width '$'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWidePercent = new(
+    private static DiagnosticDescriptor RuleWidePercent { get; } = new(
         id: RuleIdentifiers.PercentInCommentShouldBeNarrow,
-        title: "\"％\" in comment should be narrow",
-        messageFormat: "\"％\" in comment should be narrow",
+        title: "'％' should be narrow",
+        messageFormat: "Full-width '％' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '％' characters in comments should be replaced with half-width '%'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideAmpersand = new(
+    private static DiagnosticDescriptor RuleWideAmpersand { get; } = new(
         id: RuleIdentifiers.AmpersandInCommentShouldBeNarrow,
-        title: "\"＆\" in comment should be narrow",
-        messageFormat: "\"＆\" in comment should be narrow",
+        title: "'＆' should be narrow",
+        messageFormat: "Full-width '＆' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: false,  // Default off
-        description: "Full-width '＆' characters in comments should be replaced with half-width '&'.");
+        isEnabledByDefault: false);  // Default off
 
-    private static readonly DiagnosticDescriptor RuleWideParenthesis = new(
+    private static DiagnosticDescriptor RuleWideParenthesis { get; } = new(
         id: RuleIdentifiers.ParenthesisInCommentShouldBeNarrow,
-        title: "\"（）\" in comment should be narrow",
-        messageFormat: "\"（）\" in comment should be narrow",
+        title: "'（）' should be narrow",
+        messageFormat: "Full-width '（）' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width parentheses '（）' in comments should be replaced with half-width '()'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideAsterisk = new(
+    private static DiagnosticDescriptor RuleWideAsterisk { get; } = new(
         id: RuleIdentifiers.AsteriskInCommentShouldBeNarrow,
-        title: "\"＊\" in comment should be narrow",
-        messageFormat: "\"＊\" in comment should be narrow",
+        title: "'＊' should be narrow",
+        messageFormat: "Full-width '＊' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '＊' characters in comments should be replaced with half-width '*'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWidePlus = new(
+    private static DiagnosticDescriptor RuleWidePlus { get; } = new(
         id: RuleIdentifiers.PlusInCommentShouldBeNarrow,
-        title: "\"＋\" in comment should be narrow",
-        messageFormat: "\"＋\" in comment should be narrow",
+        title: "'＋' should be narrow",
+        messageFormat: "Full-width '＋' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '＋' characters in comments should be replaced with half-width '+'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideComma = new(
+    private static DiagnosticDescriptor RuleWideComma { get; } = new(
         id: RuleIdentifiers.CommaInCommentShouldBeNarrow,
-        title: "\"，\" in comment should be narrow",
-        messageFormat: "\"，\" in comment should be narrow",
+        title: "'，' should be narrow",
+        messageFormat: "Full-width '，' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: false,  // Default off
-        description: "Full-width '，' characters in comments should be replaced with half-width ','.");
+        isEnabledByDefault: false);  // Default off
 
-    private static readonly DiagnosticDescriptor RuleWideHyphen = new(
+    private static DiagnosticDescriptor RuleWideHyphen { get; } = new(
         id: RuleIdentifiers.HyphenInCommentShouldBeNarrow,
-        title: "\"－\" in comment should be narrow",
-        messageFormat: "\"－\" in comment should be narrow",
+        title: "'－' should be narrow",
+        messageFormat: "Full-width '－' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '－' characters in comments should be replaced with half-width '-'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideDot = new(
+    private static DiagnosticDescriptor RuleWideDot { get; } = new(
         id: RuleIdentifiers.DotInCommentShouldBeNarrow,
-        title: "\"．\" in comment should be narrow",
-        messageFormat: "\"．\" in comment should be narrow",
+        title: "'．' should be narrow",
+        messageFormat: "Full-width '．' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: false,  // Default off
-        description: "Full-width '．' characters in comments should be replaced with half-width '.'.");
+        isEnabledByDefault: false);  // Default off
 
-    private static readonly DiagnosticDescriptor RuleWideSlash = new(
+    private static DiagnosticDescriptor RuleWideSlash { get; } = new(
         id: RuleIdentifiers.SlashInCommentShouldBeNarrow,
-        title: "\"／\" in comment should be narrow",
-        messageFormat: "\"／\" in comment should be narrow",
+        title: "'／' should be narrow",
+        messageFormat: "Full-width '／' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '／' characters in comments should be replaced with half-width '/'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideColon = new(
+    private static DiagnosticDescriptor RuleWideColon { get; } = new(
         id: RuleIdentifiers.ColonInCommentShouldBeNarrow,
-        title: "\"：\" in comment should be narrow",
-        messageFormat: "\"：\" in comment should be narrow",
+        title: "'：' should be narrow",
+        messageFormat: "Full-width '：' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '：' characters in comments should be replaced with half-width ':'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideSemicolon = new(
+    private static DiagnosticDescriptor RuleWideSemicolon { get; } = new(
         id: RuleIdentifiers.SemicolonInCommentShouldBeNarrow,
-        title: "\"；\" in comment should be narrow",
-        messageFormat: "\"；\" in comment should be narrow",
+        title: "'；' should be narrow",
+        messageFormat: "Full-width '；' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '；' characters in comments should be replaced with half-width ';'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideLessThan = new(
+    private static DiagnosticDescriptor RuleWideLessThan { get; } = new(
         id: RuleIdentifiers.LessThanInCommentShouldBeNarrow,
-        title: "\"＜\" in comment should be narrow",
-        messageFormat: "\"＜\" in comment should be narrow",
+        title: "'＜' should be narrow",
+        messageFormat: "Full-width '＜' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '＜' characters in comments should be replaced with half-width '<'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideEquals = new(
+    private static DiagnosticDescriptor RuleWideEquals { get; } = new(
         id: RuleIdentifiers.EqualsInCommentShouldBeNarrow,
-        title: "\"＝\" in comment should be narrow",
-        messageFormat: "\"＝\" in comment should be narrow",
+        title: "'＝' should be narrow",
+        messageFormat: "Full-width '＝' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '＝' characters in comments should be replaced with half-width '='.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideGreaterThan = new(
+    private static DiagnosticDescriptor RuleWideGreaterThan { get; } = new(
         id: RuleIdentifiers.GreaterThanInCommentShouldBeNarrow,
-        title: "\"＞\" in comment should be narrow",
-        messageFormat: "\"＞\" in comment should be narrow",
+        title: "'＞' should be narrow",
+        messageFormat: "Full-width '＞' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '＞' characters in comments should be replaced with half-width '>'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideQuestion = new(
+    private static DiagnosticDescriptor RuleWideQuestion { get; } = new(
         id: RuleIdentifiers.QuestionInCommentShouldBeNarrow,
-        title: "\"？\" in comment should be narrow",
-        messageFormat: "\"？\" in comment should be narrow",
+        title: "'？' should be narrow",
+        messageFormat: "Full-width '？' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: false,  // Default off
-        description: "Full-width '？' characters in comments should be replaced with half-width '?'.");
+        isEnabledByDefault: false);  // Default off
 
-    private static readonly DiagnosticDescriptor RuleWideAtMark = new(
+    private static DiagnosticDescriptor RuleWideAtMark { get; } = new(
         id: RuleIdentifiers.AtMarkInCommentShouldBeNarrow,
-        title: "\"＠\" in comment should be narrow",
-        messageFormat: "\"＠\" in comment should be narrow",
+        title: "'＠' should be narrow",
+        messageFormat: "Full-width '＠' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '＠' characters in comments should be replaced with half-width '@'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideSquareBracket = new(
+    private static DiagnosticDescriptor RuleWideSquareBracket { get; } = new(
         id: RuleIdentifiers.SquareBracketInCommentShouldBeNarrow,
-        title: "\"［］\" in comment should be narrow",
-        messageFormat: "\"［］\" in comment should be narrow",
+        title: "'［］' should be narrow",
+        messageFormat: "Full-width '［］' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width square brackets '［］' in comments should be replaced with half-width '[]'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideCurlyBracket = new(
+    private static DiagnosticDescriptor RuleWideCurlyBracket { get; } = new(
         id: RuleIdentifiers.CurlyBracketInCommentShouldBeNarrow,
-        title: "\"｛｝\" in comment should be narrow",
-        messageFormat: "\"｛｝\" in comment should be narrow",
+        title: "'｛｝' should be narrow",
+        messageFormat: "Full-width '｛｝' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width curly brackets '｛｝' in comments should be replaced with half-width '{}'.");
+        isEnabledByDefault: true);
 
-    private static readonly DiagnosticDescriptor RuleWideYen = new(
+    private static DiagnosticDescriptor RuleWideYen { get; } = new(
         id: RuleIdentifiers.YenInCommentShouldBeNarrow,
-        title: "\"￥\" in comment should be narrow",
-        messageFormat: "\"￥\" in comment should be narrow",
+        title: "'￥' should be narrow",
+        messageFormat: "Full-width '￥' is used in a comment",
         category: "Style",
         defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "Full-width '￥' characters in comments should be replaced with the half-width yen sign '¥'.");
+        isEnabledByDefault: true);
 
     private static readonly ImmutableArray<DiagnosticDescriptor> Rules =
     [

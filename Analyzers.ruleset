@@ -20,7 +20,4 @@
   <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.NetAnalyzers">
     <Rule Id="CA1062" Action="Hidden" />
   </Rules>
-  <Rules AnalyzerId="Microsoft.CodeAnalysis.Analyzers" RuleNamespace="Microsoft.CodeAnalysis.Analyzers">
-    <Rule Id="RS2008" Action="Hidden" />
-  </Rules>
 </RuleSet>
