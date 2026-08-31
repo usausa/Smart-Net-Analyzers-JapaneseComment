@@ -358,6 +358,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         }
     }
 
+#pragma warning disable SA1503
     private static void CheckRules(SyntaxTreeAnalysisContext context, SyntaxTrivia node, ReadOnlySpan<char> range)
     {
         var flags = AnalyzeCharacters(range, context.CancellationToken);
@@ -392,6 +393,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         if ((flags & CommentCharFlags.WideCurlyBracket) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideCurlyBracket, location));
         if ((flags & CommentCharFlags.WideYen) != 0) context.ReportDiagnostic(Diagnostic.Create(RuleWideYen, location));
     }
+#pragma warning restore SA1503
 
     private static CommentCharFlags AnalyzeCharacters(ReadOnlySpan<char> range, CancellationToken cancellationToken)
     {
@@ -409,6 +411,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
         return flags;
     }
 
+#pragma warning disable SA1503
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static CommentCharFlags Classify(char c)
     {
@@ -446,6 +449,7 @@ public sealed class JapaneseCommentAnalyzer : DiagnosticAnalyzer
             _ => CommentCharFlags.None
         };
     }
+#pragma warning restore SA1503
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool IsNarrowKana(char c) =>
