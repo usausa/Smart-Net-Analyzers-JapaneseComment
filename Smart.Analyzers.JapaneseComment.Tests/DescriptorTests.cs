@@ -1,6 +1,6 @@
 namespace Smart.Analyzers.JapaneseComment;
 
-public sealed class DescriptorTest
+public sealed class DescriptorTests
 {
     [Fact]
     public void SupportedDiagnosticsAreUniqueAndComplete()

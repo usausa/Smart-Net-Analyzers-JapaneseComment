@@ -2,7 +2,7 @@ namespace Smart.Analyzers.JapaneseComment;
 
 using Microsoft.CodeAnalysis;
 
-public sealed class DocumentationCommentTest
+public sealed class DocumentationCommentTests
 {
     [Theory]
     [InlineData(DocumentationMode.None)]

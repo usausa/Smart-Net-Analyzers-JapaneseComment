@@ -1,6 +1,6 @@
 namespace Smart.Analyzers.JapaneseComment;
 
-public sealed class CommentCharacterTest
+public sealed class CommentCharacterTests
 {
     [Theory]
     [InlineData("// ｱ", RuleIdentifiers.KanaCharacterInCommentShouldBeWide)]

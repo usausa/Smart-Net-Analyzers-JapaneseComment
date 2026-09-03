@@ -4,7 +4,7 @@ using System.Globalization;
 
 using Microsoft.CodeAnalysis;
 
-public sealed class DiagnosticMessageTest
+public sealed class DiagnosticMessageTests
 {
     [Theory]
     [InlineData("’", RuleIdentifiers.SingleQuotationInCommentShouldBeNarrow)]

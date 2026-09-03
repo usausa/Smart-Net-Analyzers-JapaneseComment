@@ -2,7 +2,7 @@ namespace Smart.Analyzers.JapaneseComment;
 
 using Microsoft.CodeAnalysis;
 
-public sealed class DisabledRuleTest
+public sealed class DisabledRuleTests
 {
     [Theory]
     [InlineData("// ！", RuleIdentifiers.ExclamationInCommentShouldBeNarrow)]
