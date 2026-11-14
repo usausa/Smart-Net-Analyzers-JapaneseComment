@@ -51,9 +51,12 @@ internal static class AnalyzerTestRunner
             .GetAwaiter()
             .GetResult();
 
-        return [.. diagnostics
-            .Where(static d => d.Id.StartsWith("SAJ", StringComparison.Ordinal))
-            .OrderBy(static d => d.Location.SourceSpan.Start)];
+        return
+        [
+            .. diagnostics
+                .Where(static d => d.Id.StartsWith("SAJ", StringComparison.Ordinal))
+                .OrderBy(static d => d.Location.SourceSpan.Start)
+        ];
     }
 
     // Convenience helper that projects diagnostics to their rule ids (in source order).
